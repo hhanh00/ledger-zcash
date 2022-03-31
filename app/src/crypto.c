@@ -1110,6 +1110,7 @@ typedef struct {
         } step2;
         // STEP 2
         struct {
+            uint8_t rk[ASK_SIZE];
             uint8_t rsk[ASK_SIZE];
         } step3;
     };
@@ -1161,7 +1162,14 @@ zxerr_t crypto_signspends_sapling(uint8_t *buffer, uint16_t bufferLen, const uin
                 zip32_child(tmp.step1.zip32_seed, tmp.step2.dk, tmp.step2.ask, tmp.step2.nsk, item->path);
 
                 randomized_secret(tmp.step2.ask, (uint8_t *)item->alpha, tmp.step3.rsk);
-                sign_redjubjub((uint8_t *)tmp.step3.rsk, (uint8_t *)sighash, (uint8_t *)out);
+                sk_to_pk(tmp.step3.rsk, tmp.step3.rk);
+
+                uint8_t msg[64];
+                MEMCPY(msg, (uint8_t *)&tmp.step3.rk, 32);
+                MEMCPY(msg + 32, (uint8_t *)sighash, 32);
+
+                sign_redjubjub((uint8_t *)tmp.step3.rsk, msg, (uint8_t *)out);
+
                 zxerr_t zxerr = spend_signatures_append(out);
                 if(zxerr != zxerr_ok){
                     CLOSE_TRY;

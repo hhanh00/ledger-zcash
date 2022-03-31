@@ -20,6 +20,7 @@
 
 TESTS_JS_PACKAGE = "@zondax/ledger-zcash"
 TESTS_JS_DIR = $(CURDIR)/js
+APP_TESTING=1
 
 ifeq ($(BOLOS_SDK),)
 	include $(CURDIR)/deps/ledger-zxlib/dockerized_build.mk

@@ -121,7 +121,7 @@ void shielded_spend_hash(uint8_t *input, uint16_t inputlen, uint8_t *output) {
 
 void signature_hash(uint8_t *input, uint16_t inputlen, uint8_t *output) {
     const uint8_t CTX_ZCASH_SHIELDED_SIGNATURE_HASH_PERSONALIZATION[] = {90, 99, 97, 115, 104, 83, 105, 103, 72, 97,
-                                                                         115, 104, 187, 9, 184, 118};
+                                                                         115, 104, 0xa6, 0x75, 0xff, 0xe9};
     cx_blake2b_t ctx;
     cx_blake2b_init2(&ctx, 256, NULL, 0, (uint8_t *) CTX_ZCASH_SHIELDED_SIGNATURE_HASH_PERSONALIZATION, 16);
     cx_hash(&ctx.header, CX_LAST, input, inputlen, output, HASH_SIZE);
